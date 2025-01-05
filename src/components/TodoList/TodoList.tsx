@@ -10,15 +10,20 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export const TodoList = () => {
   const [todos, setTodos] = useState<Todo[]>(() => {
-    const savedTodos = localStorage.getItem("todos");
-    return savedTodos ? JSON.parse(savedTodos) : [];
+    if (typeof window !== "undefined") {
+      const savedTodos = localStorage.getItem("todos");
+      return savedTodos ? JSON.parse(savedTodos) : [];
+    }
+    return [];
   });
   const [newTodo, setNewTodo] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [animatingId, setAnimatingId] = useState<number | null>(null);
 
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("todos", JSON.stringify(todos));
+    }
   }, [todos]);
 
   const addTodo = () => {
